@@ -17,6 +17,24 @@ def main():
     return id_sum
 
 
+def main_2():
+    with open('Day2Input1.txt') as file:
+        bag = {"red": 12, "green": 13, "blue": 14}
+        power_sum = 0
+        for game in file:
+            low_bag = {"red": 0, "green": 0, "blue": 0}
+            invalid = False
+            game_id, bundles = clean_game(game)
+
+            for bundle in bundles:
+                colour_values = count_colours(bundle)
+                low_bag = update_low_bag(low_bag, colour_values)
+
+            power_sum += calculate_power(low_bag)
+
+    return power_sum
+
+
 def clean_game(game):
     game = game.replace('\n', '')
     sets = game.split(';')
@@ -46,3 +64,17 @@ def check_if_invalid(colour_values, bag):
             return True
 
     return False
+
+
+def update_low_bag(low_bag, colour_values):
+    for colour in colour_values.keys():
+        if colour_values[colour] > low_bag[colour]:
+            low_bag[colour] = colour_values[colour]
+    return low_bag
+
+
+def calculate_power(bag):
+    total = list(bag.values())[0]
+    for value in list(bag.values())[1:]:
+        total *= value
+    return total
