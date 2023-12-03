@@ -53,9 +53,8 @@ def get_items(line, iy):
             nums.append(Item(int(super_value), super_locations))
             super_value = ""
             super_locations = []
-            if value == "*":
-                gears.append((ix, iy))
-        elif value == "*":
+
+        if value == "*":
             gears.append((ix, iy))
 
     return nums, gears
