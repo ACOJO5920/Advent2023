@@ -19,11 +19,9 @@ def main():
 
 def main_2():
     with open('Day2Input1.txt') as file:
-        bag = {"red": 12, "green": 13, "blue": 14}
         power_sum = 0
         for game in file:
             low_bag = {"red": 0, "green": 0, "blue": 0}
-            invalid = False
             game_id, bundles = clean_game(game)
 
             for bundle in bundles:
