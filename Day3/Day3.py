@@ -119,5 +119,5 @@ class Item:
     def get_locations(self):
         return self.locations
 
-    def get(self):
-        return self.value, self.locations
+    def get_data(self):
+        return self.value
