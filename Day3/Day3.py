@@ -62,17 +62,9 @@ def get_items(line, iy):
 
 
 def calculate_gear_ratio(gear, nums):
-    adjacent_locations = []
     ix, iy = gear
-    adjacent_locations.append((ix-1, iy-1))
-    adjacent_locations.append((ix, iy-1))
-    adjacent_locations.append((ix+1, iy-1))
-    adjacent_locations.append((ix-1, iy))
-    adjacent_locations.append((ix+1, iy))
-    adjacent_locations.append((ix-1, iy+1))
-    adjacent_locations.append((ix, iy+1))
-    adjacent_locations.append((ix+1, iy+1))
-
+    adjacent_locations = [(ix - 1, iy - 1), (ix, iy - 1), (ix + 1, iy - 1), (ix - 1, iy), (ix + 1, iy),
+                          (ix - 1, iy + 1), (ix, iy + 1), (ix + 1, iy + 1)]
     close_nums = 0
     total_sum = 1
 
@@ -126,9 +118,6 @@ class Item:
 
     def get_locations(self):
         return self.locations
-
-    def get_data(self):
-        return self.value
 
     def get(self):
         return self.value, self.locations
