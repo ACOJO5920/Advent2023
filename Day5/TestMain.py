@@ -4,7 +4,7 @@ from Day5 import main
 
 class MyTestCase(unittest.TestCase):
     def test_main_test_1(self):
-        self.assertEqual(35, main('Day5Test1.txt'))
+        self.assertEqual(46, main('Day5Input1.txt'))
 
     # def test_main_input_1(self):
     #     self.assertEqual(21138, main('Day5Input1.txt'))
