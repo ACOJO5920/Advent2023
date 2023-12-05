@@ -1,24 +1,38 @@
 
 def main(filename):
     with open(filename) as file:
+        mapping = file.read().split('\n\n')[1:]
+
+    with open(filename) as file:
         seeds = file.readline()[6:].strip().split()
-        for ix in range(len(seeds)):
-            seeds[ix] = int(seeds[ix])
+        seeds = list(map(int, seeds))
+        seeds = get_ends(seeds)
 
-        smallest_location = None
-        pairs = get_ends(seeds)
-        mapping = get_maps()
+        blocks = mapping
+        for block in blocks:
+            ranges = []
+            for line in block.splitlines()[1:]:
+                ranges.append(list(map(int, line.split())))
 
-        for pair in pairs:
-            for x in range(pair[0], pair[1]):
-                location = get_location(x, mapping)
-                if smallest_location is None:
-                    smallest_location = location
-                elif location < smallest_location:
-                    smallest_location = location
-            print(smallest_location)
+            new_seeds = []
+            while len(seeds) > 0:
+                seed_start, seed_end = seeds.pop()
+                for a, b, c in ranges:
+                    overlap_start = max(seed_start, b)
+                    overlap_end = min(seed_end, b + c)
+                    if overlap_start < overlap_end:
+                        new_seeds.append((overlap_start - b + a, overlap_end - b + a))
+                        if overlap_start > seed_start:
+                            seeds.append((seed_start, overlap_start))
+                        if seed_end > overlap_end:
+                            seeds.append((overlap_end, seed_end))
+                        break
+                else:
+                    new_seeds.append((seed_start, seed_end))
 
-        return smallest_location
+            seeds = new_seeds
+
+        return min(seeds)[0]
 
 
 def get_ends(seeds):
@@ -30,42 +44,3 @@ def get_ends(seeds):
         ranges.append((start, end))
         x += 2
     return ranges
-
-
-def get_maps():
-    with open('Day5Input1.txt') as file:
-        mapping = []
-        for line in file.readlines():
-            mapping.append(line)
-    return mapping
-
-
-def get_location(seed, mapping):
-    seed_changed = False
-    new_seed = seed
-    for line in mapping:
-        line = line.split()
-
-        if len(line) == 3:
-            if not seed_changed:
-                new_seed = Mapping(line[0], line[1], line[2]).get_destination(int(seed))
-                seed_changed = False if new_seed == seed else True
-                seed = new_seed
-        else:
-            seed_changed = False
-    return new_seed
-
-
-class Mapping:
-
-    def __init__(self, destination_start, source_start, common_range):
-        self.destination_start = int(destination_start)
-        self.source_start = int(source_start)
-        self.common_range = int(common_range)
-        self.difference = self.source_start - self.destination_start
-
-    def get_destination(self, source):
-        if source < self.source_start or source > self.source_start + self.common_range:
-            return source
-
-        return source - self.difference
